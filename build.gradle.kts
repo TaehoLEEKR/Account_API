@@ -18,6 +18,11 @@ configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
+    // 모든 의존성에서 충돌되는 로깅 라이브러리 제외
+    all {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+        exclude(group = "commons-logging", module = "commons-logging")
+    }
 }
 
 repositories {
@@ -30,13 +35,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // 분산락을 위한 redisson
     implementation("org.redisson:redisson:3.22.0")
-    implementation("it.ozimov:embedded-redis:0.7.3"){
-        exclude(group = "org.slf4j", module = "slf4j-api")
-    }
+    // 임베디드 레디스
+    implementation("it.ozimov:embedded-redis:0.7.3")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-
 
     compileOnly("org.projectlombok:lombok")
 
