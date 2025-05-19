@@ -30,10 +30,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    implementation("org.redisson:redisson:3.22.0")
+    implementation("it.ozimov:embedded-redis:0.7.3"){
+        exclude(group = "org.slf4j", module = "slf4j-api")
+    }
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 
     compileOnly("org.projectlombok:lombok")
+
+    runtimeOnly("com.h2database:h2")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.projectlombok:lombok")
 
