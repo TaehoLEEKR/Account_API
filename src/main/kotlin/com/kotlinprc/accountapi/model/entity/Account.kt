@@ -17,28 +17,27 @@ import java.time.LocalDateTime
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Account(
+open class Account(
     @Column(nullable = false)
-    var accountNumber: String = "",
+    open var accountNumber: String = "",
 
     @Enumerated(EnumType.STRING)
-    var accountStatus: AccountStatus = AccountStatus.IN_USE,
-    var balance: Long = 0,
+    open var accountStatus: AccountStatus = AccountStatus.IN_USE,
+    open var balance: Long = 0,
 
-    var registeredAt: LocalDateTime = LocalDateTime.now(),
-    var unRegisteredAt: LocalDateTime = LocalDateTime.now(),
+    open var registeredAt: LocalDateTime = LocalDateTime.now(),
+    open var unRegisteredAt: LocalDateTime = LocalDateTime.now(),
 
     @CreatedDate
-    var createdAt: LocalDateTime = LocalDateTime.now(),
+    open var createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
-    var updatedAt: LocalDateTime = LocalDateTime.now()
+    open var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    var id: Long? = null
+    open var id: Long? = null
 
     @ManyToOne
     open var accountUser: AccountUser? = null
-
 }
