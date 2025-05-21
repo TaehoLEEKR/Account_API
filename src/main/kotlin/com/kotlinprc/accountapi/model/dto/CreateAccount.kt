@@ -18,5 +18,15 @@ class CreateAccount {
         val userId: Long,
         val accountNumber: String,
         val registerAt: LocalDateTime
-    )
+    ){
+        companion object {
+            fun fromAccountDto(accountDto: AccountDto): Response {
+                return Response(
+                    userId = accountDto.userId,
+                    accountNumber = accountDto.accountNumber,
+                    registerAt = accountDto.registeredAt
+                )
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.kotlinprc.accountapi.service
 
 import com.kotlinprc.accountapi.exception.AccountException
+import com.kotlinprc.accountapi.model.dto.AccountDto
 import com.kotlinprc.accountapi.model.entity.Account
 import com.kotlinprc.accountapi.model.entity.AccountUser
 import com.kotlinprc.accountapi.model.enums.AccountStatus
@@ -23,7 +24,7 @@ class AccountService(
      * 계좌를 저장하고, 정보를  return
      */
     @Transactional
-    fun registerAccount(userId: Long , initBalance: Long) : Account {
+    fun registerAccount(userId: Long , initBalance: Long) : AccountDto {
 
         // 사용자 조회
         var accountUser : AccountUser = accountUserRepository.findById(userId)
@@ -37,15 +38,17 @@ class AccountService(
             ?: "1000000000"
 
         // 빌더
-        val account = Account(
-            accountNumber = newAccountNum,
-            balance = initBalance,
-            accountUser = accountUser,
-            accountStatus = AccountStatus.IN_USE,
-            registeredAt = java.time.LocalDateTime.now()
+        val account = accountRepository.save (
+            Account(
+                accountNumber = newAccountNum,
+                balance = initBalance,
+                accountUser = accountUser,
+                accountStatus = AccountStatus.IN_USE,
+                registeredAt = java.time.LocalDateTime.now()
+            )
         )
 
-        return accountRepository.save(account)
+        return AccountDto.fromEntity(account);
 
     }
 }

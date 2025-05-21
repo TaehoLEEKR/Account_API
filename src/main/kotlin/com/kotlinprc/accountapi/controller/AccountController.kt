@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.controller
 
+import com.kotlinprc.accountapi.model.dto.AccountDto
 import com.kotlinprc.accountapi.model.dto.CreateAccount
 import com.kotlinprc.accountapi.service.AccountService
 import jakarta.validation.Valid
@@ -21,12 +22,9 @@ class AccountController(
     @PostMapping("/register")
     fun registerAccount( @RequestBody @Valid createdAccount: CreateAccount.Request): CreateAccount.Response{
         try {
-            accountService.registerAccount(createdAccount.userId,createdAccount.iniBalance);
-            return  CreateAccount.Response(
-                userId = 1L,
-                accountNumber = "123456789",
-                registerAt = LocalDateTime.now()
-            )
+            var accountDto : AccountDto = accountService.registerAccount(createdAccount.userId,createdAccount.iniBalance);
+
+            return  CreateAccount.Response.fromAccountDto(accountDto);
 
         }catch (e: Exception){
             logger.error { "계좌 생성중 Exception 발생 : {$e}" }
