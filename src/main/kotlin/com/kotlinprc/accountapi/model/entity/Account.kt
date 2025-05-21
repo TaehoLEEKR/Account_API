@@ -31,13 +31,15 @@ open class Account(
     @CreatedDate
     open var createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
-    open var updatedAt: LocalDateTime = LocalDateTime.now()
+    open var updatedAt: LocalDateTime = LocalDateTime.now(),
+
+    @ManyToOne
+    open var accountUser: AccountUser? = null
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     open var id: Long? = null
 
-    @ManyToOne
-    open var accountUser: AccountUser? = null
+
 }
