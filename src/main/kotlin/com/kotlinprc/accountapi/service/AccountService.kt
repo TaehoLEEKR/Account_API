@@ -10,7 +10,10 @@ import com.kotlinprc.accountapi.repository.AccountRepository
 import com.kotlinprc.accountapi.repository.AccountUserRepository
 import jakarta.transaction.Transactional
 import lombok.RequiredArgsConstructor
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class AccountService(
@@ -26,16 +29,20 @@ class AccountService(
     @Transactional
     fun registerAccount(userId: Long , initBalance: Long) : AccountDto {
 
+        logger.info { "========== register service start ==========" }
         // 사용자 조회
         var accountUser : AccountUser = accountUserRepository.findById(userId)
             .orElseThrow {
                 AccountException(ErrorCode.USER_NOT_FOUND)
             }
+        logger.info { "========== register accountUser end ==========" }
 
         // 계좌번호 생성
         val newAccountNum: String = accountRepository.findFirstByOrderByIdDesc()
             ?.let {it -> (Integer.parseInt(it.accountNumber) + 1).toString() }
             ?: "1000000000"
+
+        logger.info { "========== register newAccountNum end ========== : {$newAccountNum} " }
 
         // 빌더
         val account = accountRepository.save (
@@ -48,6 +55,7 @@ class AccountService(
             )
         )
 
+        logger.info { "========== register service end ==========" }
         return AccountDto.fromEntity(account);
 
     }

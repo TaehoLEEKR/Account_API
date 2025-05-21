@@ -22,7 +22,11 @@ class AccountController(
     @PostMapping("/register")
     fun registerAccount( @RequestBody @Valid createdAccount: CreateAccount.Request): CreateAccount.Response{
         try {
+            logger.info("========= register start ========");
+
             var accountDto : AccountDto = accountService.registerAccount(createdAccount.userId,createdAccount.iniBalance);
+
+            logger.info("========= register end ======== : {$accountDto} ");
 
             return  CreateAccount.Response.fromAccountDto(accountDto);
 
