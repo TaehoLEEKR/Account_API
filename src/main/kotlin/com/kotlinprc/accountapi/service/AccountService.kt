@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional
 import lombok.RequiredArgsConstructor
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import java.util.Objects
 
 private val logger = KotlinLogging.logger {}
 
@@ -58,5 +59,44 @@ class AccountService(
         logger.info { "========== register service end ==========" }
         return AccountDto.fromEntity(account);
 
+    }
+
+    @Transactional
+    fun deleteAccount(userId: Long, accountNumber: String): AccountDto {
+        var accountUser : AccountUser = accountUserRepository.findById(userId)
+            .orElseThrow {
+                AccountException(ErrorCode.USER_NOT_FOUND)
+            }
+
+        var account : Account = accountRepository.findByAccountNumber(accountNumber)
+            .orElseThrow {
+                AccountException(ErrorCode.USER_NOT_FOUND)
+            }
+        validateDeleteAccount(accountUser, account);
+
+        account.accountStatus = AccountStatus.UNREGISTERED;
+        account.unRegisteredAt = java.time.LocalDateTime.now();
+
+        return AccountDto.fromEntity(account);
+
+    }
+
+
+
+    private fun validateDeleteAccount(
+        accountUser: AccountUser,
+        account: Account
+    ) {
+        if(!Objects.equals(accountUser.id, account.accountUser?.id)) {
+            throw AccountException(ErrorCode.USER_ACCOUNT_UN_MATCH);
+        }
+
+        if(account.accountStatus == AccountStatus.UNREGISTERED) {
+            throw AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED)
+        }
+
+        if(account.balance > 0) {
+            throw AccountException(ErrorCode.BALANCE_NOT_EMPTY)
+        }
     }
 }
