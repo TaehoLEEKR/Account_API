@@ -105,8 +105,17 @@ class AccountService(
         var accountUser : AccountUser = accountUserRepository.findById(userId)
             .orElseThrow { AccountException(ErrorCode.USER_NOT_FOUND) }
 
+        logger.info { "========== getAccountByUserId end ========== : {$accountUser}" }
+
         var accounts : List<Account> = accountRepository.findByAccountUser(accountUser);
 
+        logger.info { "========== getAccountByUserId end ========== : {$accounts}" }
+        if(accounts.isEmpty()) {
+
+            logger.info { "========== getAccountByUserId end ========== : empty" }
+
+            return listOf();
+        }
         return accounts.map {
             AccountInfo.fromAccountDto(
                 AccountDto.fromEntity(it)

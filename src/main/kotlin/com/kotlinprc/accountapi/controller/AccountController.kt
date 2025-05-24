@@ -1,13 +1,14 @@
 package com.kotlinprc.accountapi.controller
 
 import com.kotlinprc.accountapi.component.StaticLogger.Companion.logger
+import com.kotlinprc.accountapi.exception.AccountException
 import com.kotlinprc.accountapi.model.dto.AccountDto
 import com.kotlinprc.accountapi.model.dto.AccountInfo
 import com.kotlinprc.accountapi.model.dto.CreateAccount
 import com.kotlinprc.accountapi.model.dto.DeleteAccount
+import com.kotlinprc.accountapi.model.enums.ErrorCode
 import com.kotlinprc.accountapi.service.AccountService
 import jakarta.validation.Valid
-import mu.KotlinLogging
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
-
 
 
 @RestController
@@ -60,6 +60,14 @@ class AccountController(
 
     @GetMapping("/list")
     fun getAccountUserID(@RequestParam("user_id") userId: Long): List<AccountInfo> {
-        return accountService.getAccountByUserId(userId)
+
+        var resultList : List<AccountInfo> = accountService.getAccountByUserId(userId);
+
+        if(resultList.isEmpty()) {
+            throw AccountException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }else{
+            return resultList;
+        }
+
     }
 }
