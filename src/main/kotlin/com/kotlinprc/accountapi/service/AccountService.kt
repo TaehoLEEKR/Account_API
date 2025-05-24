@@ -3,6 +3,7 @@ package com.kotlinprc.accountapi.service
 import com.kotlinprc.accountapi.component.StaticLogger.Companion.logger
 import com.kotlinprc.accountapi.exception.AccountException
 import com.kotlinprc.accountapi.model.dto.AccountDto
+import com.kotlinprc.accountapi.model.dto.AccountInfo
 import com.kotlinprc.accountapi.model.entity.Account
 import com.kotlinprc.accountapi.model.entity.AccountUser
 import com.kotlinprc.accountapi.model.enums.AccountStatus
@@ -98,5 +99,19 @@ class AccountService(
         if(account.balance > 0) {
             throw AccountException(ErrorCode.BALANCE_NOT_EMPTY)
         }
+    }
+
+    fun getAccountByUserId(userId: Long) : List<AccountInfo> {
+        var accountUser : AccountUser = accountUserRepository.findById(userId)
+            .orElseThrow { AccountException(ErrorCode.USER_NOT_FOUND) }
+
+        var accounts : List<Account> = accountRepository.findByAccountUser(accountUser);
+
+        return accounts.map {
+            AccountInfo.fromAccountDto(
+                AccountDto.fromEntity(it)
+            )
+        }
+//        return ;
     }
 }
