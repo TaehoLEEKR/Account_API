@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.controller
 
+import com.kotlinprc.accountapi.component.StaticLogger.Companion.logger
 import com.kotlinprc.accountapi.model.dto.AccountDto
 import com.kotlinprc.accountapi.model.dto.CreateAccount
 import com.kotlinprc.accountapi.model.dto.DeleteAccount
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 
-private val logger = KotlinLogging.logger {}
 
 
 @RestController

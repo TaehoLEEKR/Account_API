@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.service
 
+import com.kotlinprc.accountapi.component.StaticLogger.Companion.logger
 import com.kotlinprc.accountapi.exception.AccountException
 import com.kotlinprc.accountapi.model.dto.AccountDto
 import com.kotlinprc.accountapi.model.entity.Account
@@ -14,7 +15,6 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import java.util.Objects
 
-private val logger = KotlinLogging.logger {}
 
 @Service
 class AccountService(

@@ -1,16 +1,15 @@
 package com.kotlinprc.accountapi.service
 
+import com.kotlinprc.accountapi.component.StaticLogger
+import com.kotlinprc.accountapi.component.StaticLogger.Companion.logger
 import mu.KotlinLogging
 import org.redisson.api.RLock
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 
-private val logger = KotlinLogging.logger {}
-
 @Service
 class RedisTestService(
-    private val redissonClient: RedissonClient
-
+    private val redissonClient: RedissonClient,
 ) {
 
     fun getLock(): String?{
