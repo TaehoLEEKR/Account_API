@@ -73,4 +73,58 @@ class TransactionService (
             throw AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE)
         }
     }
+
+    @Transactional
+    fun cancelBalance(transactionId: String, accountNumber: String, amount: Long): TransactionDto {
+
+        val transaction: Transaction = transactionRepository.findByTransactionId(transactionId)
+            .orElseThrow {
+                AccountException(ErrorCode.TRANSACTION_NOT_FOUND)
+            }
+
+        val account: Account = accountRepository.findByAccountNumber(accountNumber)
+            .orElseThrow {
+                AccountException(ErrorCode.ACCOUNT_NOT_FOUND)
+            }
+
+
+        validationCancelBalance(transaction, account, accountNumber, amount)
+        account.balance += amount
+        accountRepository.save(account)
+
+        val cancellationTransaction = Transaction(
+            transactionType = TransactionType.CANCEL,
+            transactionId = UUID.randomUUID().toString(),
+            transactionResult = TransactionResult.S,
+            account = account,
+            amount = amount,
+            balanceSnapshot = account.balance
+        )
+
+        val savedTransaction = transactionRepository.save(cancellationTransaction)
+
+        transaction.transactionType = TransactionType.CANCEL
+        transactionRepository.save(transaction)
+
+        return TransactionDto.fromEntity(savedTransaction)
+    }
+
+
+    private fun validationCancelBalance(
+        transaction: Transaction,
+        account: Account,
+        accountNumber: String,
+        amount: Long
+    ) {
+        if (transaction.account?.accountNumber != accountNumber) {
+            throw AccountException(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH)
+        }
+        if (transaction.amount != amount) {
+            throw AccountException(ErrorCode.CANCEL_MUST_FULLY)
+        }
+        if (account.accountStatus != AccountStatus.IN_USE) {
+            throw AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED)
+        }
+    }
+
 }

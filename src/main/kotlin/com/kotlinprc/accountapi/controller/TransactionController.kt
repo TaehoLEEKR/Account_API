@@ -2,6 +2,7 @@ package com.kotlinprc.accountapi.controller
 
 import com.kotlinprc.accountapi.model.dto.TransactionDto
 import com.kotlinprc.accountapi.model.dto.UseBalance
+import com.kotlinprc.accountapi.model.dto.cancelBalance
 import com.kotlinprc.accountapi.service.TransactionService
 import jakarta.validation.Valid
 import lombok.RequiredArgsConstructor
@@ -24,5 +25,15 @@ class TransactionController (
             request.amount
         )
         return UseBalance.Response.fromAccountDto(transactionDto);
+    }
+
+    @PostMapping("/transaction/cancel")
+    fun cancelBalance(@Valid @RequestBody request: cancelBalance.Request) : cancelBalance.Response {
+        val transactionDto : TransactionDto =  transactionService.cancelBalance(
+            request.transactionId,request.accountNumber,
+            request.amount
+        )
+        return cancelBalance.Response.fromAccountDto(transactionDto);
+
     }
 }
