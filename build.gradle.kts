@@ -40,7 +40,8 @@ dependencies {
     // 분산락을 위한 redisson
     implementation("org.redisson:redisson:3.22.0")
     // 임베디드 레디스
-    implementation("it.ozimov:embedded-redis:0.7.3")
+//    implementation("it.ozimov:embedded-redis:0.7.3")
+    implementation("com.github.kstyrc:embedded-redis:0.6")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 

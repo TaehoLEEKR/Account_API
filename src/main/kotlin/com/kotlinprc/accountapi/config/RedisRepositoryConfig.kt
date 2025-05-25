@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class RedisRepositoryConfig (
-    @Value("\${spring.redis.host}")
+    @Value("\${spring.data.redis.host:127.0.0.1}")
     val host: String,
-    @Value("\${spring.redis.port}")
+    @Value("\${spring.data.redis.port:56379}")
     val port: Int,
 ){
 
