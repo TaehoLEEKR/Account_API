@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.controller
 
+import com.kotlinprc.accountapi.model.dto.TransactionDto
 import com.kotlinprc.accountapi.model.dto.UseBalance
 import com.kotlinprc.accountapi.service.TransactionService
 import jakarta.validation.Valid
@@ -18,6 +19,10 @@ class TransactionController (
     fun useBalance(
         @RequestBody @Valid request : UseBalance.Request
     ) : UseBalance.Response {
-        transactionService.
+       val transactionDto : TransactionDto =  transactionService.useBalance(
+            request.userId,request.accountNumber,
+            request.amount
+        )
+        return UseBalance.Response.fromAccountDto(transactionDto);
     }
 }

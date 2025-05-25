@@ -1,6 +1,8 @@
 package com.kotlinprc.accountapi.model.entity
 
+import com.kotlinprc.accountapi.exception.AccountException
 import com.kotlinprc.accountapi.model.enums.AccountStatus
+import com.kotlinprc.accountapi.model.enums.ErrorCode
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
@@ -42,4 +44,8 @@ open class Account(
     open var id: Long? = null
 
 
+    fun useBalance(amount: Long) {
+        if(amount > balance) throw AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+        balance -= amount
+    }
 }

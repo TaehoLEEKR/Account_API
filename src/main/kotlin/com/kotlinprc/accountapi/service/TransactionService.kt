@@ -4,14 +4,18 @@ import com.kotlinprc.accountapi.exception.AccountException
 import com.kotlinprc.accountapi.model.dto.TransactionDto
 import com.kotlinprc.accountapi.model.entity.Account
 import com.kotlinprc.accountapi.model.entity.AccountUser
+import com.kotlinprc.accountapi.model.entity.Transaction
 import com.kotlinprc.accountapi.model.enums.AccountStatus
 import com.kotlinprc.accountapi.model.enums.ErrorCode
+import com.kotlinprc.accountapi.model.enums.TransactionResult
+import com.kotlinprc.accountapi.model.enums.TransactionType
 import com.kotlinprc.accountapi.repository.AccountRepository
 import com.kotlinprc.accountapi.repository.AccountUserRepository
 import com.kotlinprc.accountapi.repository.TransactionRepository
 import jakarta.transaction.Transactional
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +38,24 @@ class TransactionService (
                 AccountException(ErrorCode.ACCOUNT_NOT_FOUND)
             }
         validationUseBalance(accountUser, account,amount);
-        
-        return ;
+
+        // 차감
+        account.useBalance(amount);
+        val transaction : Transaction =
+            Transaction(
+                transactionType=TransactionType.USE,
+                transactionResult = TransactionResult.S,
+                account = account,
+                amount = amount,
+                balanceSnapshot = account.balance,
+                transactionId = UUID.randomUUID().toString().replace("-",""),
+                transactionAt = java.time.LocalDateTime.now()
+            )
+         transactionRepository.save(transaction);
+
+        val transactionDto = TransactionDto.fromEntity(transaction);
+
+        return transactionDto;
     }
 
     private fun validationUseBalance(accountUser: AccountUser, account: Account, amount: Long) {

@@ -19,10 +19,10 @@ open class Transaction(
 
     @ManyToOne
     open var account: Account? = null,
-
+    open var amount : Long = 0L,
     open var balanceSnapshot : Long = 0L,
 
-    open var transactionId : Long = 0L,
+    open var transactionId : String = "",
     open var transactionAt : LocalDateTime = LocalDateTime.now(),
 
     @CreatedDate
