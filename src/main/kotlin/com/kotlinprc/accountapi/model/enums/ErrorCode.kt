@@ -1,6 +1,8 @@
 package com.kotlinprc.accountapi.model.enums
 
 enum class ErrorCode(val description: String) {
+    INTERNAL_SERVER_ERROR("내부 서버 오류 발생"),
+
     USER_NOT_FOUND("사용자가 없습니다."),
     TRANSACTION_NOT_FOUND("해당 거래가 없습니다."),
     ACCOUNT_NOT_FOUND("계좌가 없습니다."),
