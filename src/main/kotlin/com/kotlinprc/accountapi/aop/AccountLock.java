@@ -1,16 +1,10 @@
 package com.kotlinprc.accountapi.aop;
 
-import kotlin.annotation.AnnotationRetention;
-import kotlin.annotation.Retention;
-
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Target;
-
-import java.lang.annotation.ElementType;
+import java.lang.annotation.*;
 
 @Target(ElementType.METHOD)
-@Retention(AnnotationRetention.RUNTIME)
-@Deprecated
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
 @Inherited
 public @interface AccountLock {
     long tryLockTime() default 5000L;

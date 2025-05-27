@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.controller
 
+import com.kotlinprc.accountapi.aop.AccountLock
 import com.kotlinprc.accountapi.model.dto.TransactionDto
 import com.kotlinprc.accountapi.model.dto.UseBalance
 import com.kotlinprc.accountapi.model.dto.cancelBalance
@@ -17,6 +18,7 @@ class TransactionController (
 ){
 
     @PostMapping("/transaction/use")
+    @AccountLock
     fun useBalance(
         @RequestBody @Valid request : UseBalance.Request
     ) : UseBalance.Response {
@@ -28,6 +30,7 @@ class TransactionController (
     }
 
     @PostMapping("/transaction/cancel")
+    @AccountLock
     fun cancelBalance(@Valid @RequestBody request: cancelBalance.Request) : cancelBalance.Response {
         val transactionDto : TransactionDto =  transactionService.cancelBalance(
             request.transactionId,request.accountNumber,
