@@ -6,7 +6,7 @@ import lombok.Builder
 import java.time.LocalDateTime
 
 class CreateAccount {
-    data class Request(
+    data class Request (
         @NotNull @Min(1)
         val userId: Long,
         @NotNull @Min(100)

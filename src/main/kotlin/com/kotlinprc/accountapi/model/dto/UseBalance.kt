@@ -1,5 +1,6 @@
 package com.kotlinprc.accountapi.model.dto
 
+import com.kotlinprc.accountapi.aop.AccountLockIdInterface
 import com.kotlinprc.accountapi.model.dto.CreateAccount.Response
 import com.kotlinprc.accountapi.model.enums.TransactionResult
 import jakarta.validation.constraints.Min
@@ -19,7 +20,11 @@ class UseBalance {
 
         @NotNull @Min(100)
         val amount: Long
-    )
+    ) : AccountLockIdInterface {
+        override fun getAccountNumber(): String? {
+            return accountNumber
+        }
+    }
 
     @Builder
     data class Response(
