@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 class RedisTestService_TEST {
     private lateinit var redissonClient: RedissonClient
     private lateinit var rLock: RLock
-    private lateinit var redisTestService: RedisTestService
+    private lateinit var lockService: LockService
 
     @BeforeEach
     fun setUp() {
@@ -22,7 +22,7 @@ class RedisTestService_TEST {
 
         every { redissonClient.getLock("sampleLock") } returns rLock
 
-        redisTestService = RedisTestService(redissonClient)
+        lockService = LockService(redissonClient)
     }
 
     @Test
@@ -31,7 +31,7 @@ class RedisTestService_TEST {
         every { rLock.tryLock(1, 3, TimeUnit.SECONDS) } returns true
 
         // when
-        val result = redisTestService.getLock()
+        val result = lockService.getLock()
 
         // then
         assertEquals("Lock acquired", result)
@@ -44,7 +44,7 @@ class RedisTestService_TEST {
         every { rLock.tryLock(1, 3, TimeUnit.SECONDS) } returns false
 
         // when
-        val result = redisTestService.getLock()
+        val result = lockService.getLock()
 
         // then
         assertEquals("Lock failed", result)
@@ -57,7 +57,7 @@ class RedisTestService_TEST {
         every { rLock.tryLock(1, 3, TimeUnit.SECONDS) } throws RuntimeException("테스트 예외")
 
         // when
-        val result = redisTestService.getLock()
+        val result = lockService.getLock()
 
         // then
         assertEquals(null, result)
