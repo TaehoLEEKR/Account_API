@@ -22,6 +22,7 @@ class TransactionController (
     fun useBalance(
         @RequestBody @Valid request : UseBalance.Request
     ) : UseBalance.Response {
+        Thread.sleep(1000)
        val transactionDto : TransactionDto =  transactionService.useBalance(
             request.userId,request.accountNumber,
             request.amount

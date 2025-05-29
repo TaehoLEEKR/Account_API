@@ -18,7 +18,7 @@ class LockService(
         logger.debug { "Lock acquired : {$accountNumber}"  };
 
         try{
-            val isLock : Boolean = lock.tryLock(1, 5, java.util.concurrent.TimeUnit.SECONDS)
+            val isLock : Boolean = lock.tryLock(1, 10, java.util.concurrent.TimeUnit.SECONDS)
 
             logger.info { "Lock failed : {$isLock}"  };
 
@@ -26,7 +26,10 @@ class LockService(
                 throw  AccountException(ErrorCode.LOCK_FAILED);
             }
 
-        }catch (e: Exception){
+        }catch (e: AccountException){
+            throw e;
+        }
+        catch (e: Exception){
             logger.error { "Lock failed : {$e}"  };
         }
 
